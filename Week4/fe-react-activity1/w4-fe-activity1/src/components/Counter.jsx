@@ -7,10 +7,9 @@ const Counter = () => {
   return (
     <div className={`state ${theme}`}>
       <h1>UseState Component</h1>
-      {/*
+
       <button onClick={() => setTheme('dark')}>Dark</button>
       <button onClick={() => setTheme('light')}>Light</button>
-      */}
 
         <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
           Toggle Theme
