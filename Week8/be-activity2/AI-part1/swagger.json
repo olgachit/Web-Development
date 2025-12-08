@@ -1,0 +1,293 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Users & Jobs API",
+    "version": "1.0.0",
+    "description": "API documentation for Users and Jobs service. All routes except login & signup require authentication."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:4000/api"
+    }
+  ],
+  "paths": {
+    "/users/signup": {
+      "post": {
+        "summary": "User Signup",
+        "tags": ["Users"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserSignupRequest" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful signup",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AuthResponse" }
+              }
+            }
+          },
+          "400": { "description": "Invalid user data" }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "summary": "User Login",
+        "tags": ["Users"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserLoginRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful login",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AuthResponse" }
+              }
+            }
+          },
+          "400": { "description": "Invalid credentials" }
+        }
+      }
+    },
+
+    "/jobs": {
+      "get": {
+        "summary": "Get All Jobs",
+        "tags": ["Jobs"],
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "List of jobs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Job" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a Job",
+        "tags": ["Jobs"],
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/JobCreateRequest" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Job created",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Job" }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/jobs/{jobId}": {
+      "get": {
+        "summary": "Get Job by ID",
+        "tags": ["Jobs"],
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Job found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Job" }
+              }
+            }
+          },
+          "404": { "description": "Job not found" }
+        }
+      },
+      "put": {
+        "summary": "Update Job",
+        "tags": ["Jobs"],
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/JobUpdateRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated job",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Job" }
+              }
+            }
+          },
+          "404": { "description": "Job not found" }
+        }
+      },
+      "delete": {
+        "summary": "Delete Job",
+        "tags": ["Jobs"],
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "204": { "description": "Job deleted" },
+          "404": { "description": "Job not found" }
+        }
+      }
+    }
+  },
+
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "password": { "type": "string" },
+          "phone_number": { "type": "string" },
+          "gender": { "type": "string" },
+          "date_of_birth": { "type": "string", "format": "date" },
+          "membership_status": { "type": "string" }
+        }
+      },
+      "UserSignupRequest": {
+        "type": "object",
+        "required": ["name", "email", "password", "phone_number", "gender", "date_of_birth", "membership_status"],
+        "properties": {
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "password": { "type": "string" },
+          "phone_number": { "type": "string" },
+          "gender": { "type": "string" },
+          "date_of_birth": { "type": "string", "format": "date" },
+          "membership_status": { "type": "string" }
+        }
+      },
+      "UserLoginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": { "type": "string" },
+          "password": { "type": "string" }
+        }
+      },
+      "AuthResponse": {
+        "type": "object",
+        "properties": {
+          "email": { "type": "string" },
+          "token": { "type": "string" }
+        }
+      },
+
+      "Job": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string" },
+          "title": { "type": "string" },
+          "type": { "type": "string" },
+          "description": { "type": "string" },
+          "company": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "contactEmail": { "type": "string" },
+              "contactPhone": { "type": "string" }
+            }
+          },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+
+      "JobCreateRequest": {
+        "type": "object",
+        "required": ["title", "type", "description", "company"],
+        "properties": {
+          "title": { "type": "string" },
+          "type": { "type": "string" },
+          "description": { "type": "string" },
+          "company": {
+            "type": "object",
+            "required": ["name", "contactEmail", "contactPhone"],
+            "properties": {
+              "name": { "type": "string" },
+              "contactEmail": { "type": "string" },
+              "contactPhone": { "type": "string" }
+            }
+          }
+        }
+      },
+
+      "JobUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string" },
+          "type": { "type": "string" },
+          "description": { "type": "string" },
+          "company": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "contactEmail": { "type": "string" },
+              "contactPhone": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}
