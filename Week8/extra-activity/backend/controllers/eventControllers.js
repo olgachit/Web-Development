@@ -24,7 +24,16 @@ const createEvent = async (req, res) => {
 
 // GET /events/:eventId
 const getEventById = async (req, res) => {
-  res.send("getEventById");
+  const { eventId } = req.params;
+  try {
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ error: "Event not found" });
+    }
+    res.status(200).json(event);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch event" });
+  }
 };
 
 // PUT /events/:eventId
@@ -34,7 +43,16 @@ const updateEvent = async (req, res) => {
 
 // DELETE /events/:eventId
 const deleteEvent = async (req, res) => {
-  res.send("deleteEvent");
+  const { eventId } = req.params;
+  try {
+    const event = await Event.findOneAndDelete({ _id: eventId });
+    if (!event) {
+      return res.status(404).json({ error: "Event not found" });
+    }
+    res.status(200).json({ message: "Event deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete event" });
+  }
 };
 
 module.exports = {

@@ -5,6 +5,7 @@ import Home from "./pages/HomePage";
 import AddEventPage from "./pages/AddEventPage";
 import Navbar from "./components/Navbar";
 import NotFoundPage from "./pages/NotFoundPage"
+import EventPage from "./pages/EventPage";
 
 const App = () => {
 
@@ -16,6 +17,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/add-event" element={<AddEventPage />} />
+              <Route path="/events/:eventId" element={<EventPage />} />
               <Route path='*' element={<NotFoundPage />} />
             </Routes>
           </div>
