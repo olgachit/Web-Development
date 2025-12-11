@@ -6,7 +6,7 @@ const EventListing = ({ event }) => {
       <Link to={`/events/${event._id}`}>
       <h2>{event.title}</h2>
       </Link>
-      <p>Date: {event.date}</p>
+      <p>Date: {(new Date(event.date)).toLocaleDateString()}</p>
       <p>Organizer: {event.organizer.name}</p>
     </div>
   );

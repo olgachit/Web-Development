@@ -49,12 +49,13 @@ const EventPage = () => {
       {event && (
         <div>
           <h2>{event.title}</h2>
-          <p>Date: {new Date(event.date).toLocaleDateString()}</p>
+          <p>Date: {(new Date(event.date)).toLocaleDateString()}</p>
           <p>Location: {event.location}</p>
           <p>Organizer: {event.organizer.name}</p>
           <p>Contact Email: {event.organizer.contactEmail}</p>
           <p>Contact Phone: {event.organizer.contactPhone}</p>
           <button onClick={handleDelete}>Delete Event</button>
+          <button onClick={() => navigate(`/events/${eventId}/edit`)}>Edit Event</button>
         </div>
       )}
     </div>

@@ -25,6 +25,10 @@ const createEvent = async (req, res) => {
 // GET /events/:eventId
 const getEventById = async (req, res) => {
   const { eventId } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(eventId)) {
+    return res.status(400).json({ error: "Invalid event ID" });
+  }
   try {
     const event = await Event.findById(eventId);
     if (!event) {
@@ -38,12 +42,31 @@ const getEventById = async (req, res) => {
 
 // PUT /events/:eventId
 const updateEvent = async (req, res) => {
-  res.send("updateEvent");
+  const { eventId } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(eventId)) {
+    return res.status(400).json({ error: "Invalid event ID" });
+  }
+  try {
+    const event = await Event.findOneAndUpdate(
+      { _id: eventId },
+      req.body,
+      { new: true }
+    );
+    if (!event) {
+      return res.status(404).json({ error: "Event not found" });
+    }
+    res.status(200).json(event);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update event" });
+  }
 };
 
 // DELETE /events/:eventId
 const deleteEvent = async (req, res) => {
   const { eventId } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(eventId)) {
+    return res.status(400).json({ error: "Invalid event ID" });
+  }
   try {
     const event = await Event.findOneAndDelete({ _id: eventId });
     if (!event) {

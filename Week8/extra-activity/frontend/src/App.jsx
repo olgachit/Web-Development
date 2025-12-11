@@ -6,6 +6,7 @@ import AddEventPage from "./pages/AddEventPage";
 import Navbar from "./components/Navbar";
 import NotFoundPage from "./pages/NotFoundPage"
 import EventPage from "./pages/EventPage";
+import EditEventPage from "./pages/EditEventPage";
 
 const App = () => {
 
@@ -18,6 +19,7 @@ const App = () => {
               <Route path="/" element={<Home />} />
               <Route path="/add-event" element={<AddEventPage />} />
               <Route path="/events/:eventId" element={<EventPage />} />
+              <Route path="/events/:eventId/edit" element={<EditEventPage />} />
               <Route path='*' element={<NotFoundPage />} />
             </Routes>
           </div>
